@@ -1,0 +1,14 @@
+[{
+  "name": "Test Event 1 - smoke test",
+  "aoc": "Event 1 for smoke testing (no AC)",
+  "alertType": "Space",
+  "acID": null,
+  "id": "5"
+},
+{
+  "name": "Test Event 2 - connection test",
+  "aoc": "Event 2 - NO AC",
+  "alertType": "Space",
+  "acID": null,
+  "id": "6"
+}]
