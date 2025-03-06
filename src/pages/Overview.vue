@@ -16,7 +16,7 @@
             </div>
           </stats-card>
         </div>
-
+ 
         <div class="col-xl-3 col-md-6 center">
           <stats-card>
             <div slot="header" class="icon-success">
@@ -31,7 +31,7 @@
             </div>
           </stats-card>
         </div>
-
+ 
         <div class="col-xl-3 col-md-6 center">
           <stats-card>
             <div slot="header" class="icon-info">
@@ -47,8 +47,7 @@
           </stats-card>
         </div>
       </div>
-
-
+ 
       <!-- second row of cards -->
       <div class="row">
         <div class="col-xl-3 col-md-6 center">
@@ -65,7 +64,7 @@
             </div>
           </stats-card>
         </div>
-
+ 
         <div class="col-xl-3 col-md-6 center">
           <stats-card>
             <div slot="header" class="icon-success">
@@ -80,7 +79,7 @@
             </div>
           </stats-card>
         </div>
-
+ 
         <div class="col-xl-3 col-md-6 center">
           <stats-card>
             <div slot="header" class="icon-danger">
@@ -96,9 +95,9 @@
           </stats-card>
         </div>
       </div>
-
-      <card>
-        <h4 slot="header" class="card-title">Send Event</h4>
+ 
+      <card class="col-md-6">
+        <h4 slot="header" class="card-title">Send Event(s) or AC(s)</h4>
         <form>
           <div class="row">
             <div class="col-md-6">
@@ -118,7 +117,6 @@
               </div>
             </div>
           </div>
-
           <div class="row">
             <div class="col-md-12">
               <div class="form-group">
@@ -136,10 +134,18 @@
               Publish
             </button>
           </div>
+          <div class="text-center">
+            <button type="submit" @click="handleClear" class="btn btn-info btn-fill float-right clear-btn">
+              Clear
+            </button>
+          </div>
           <div class="clearfix"></div>
         </form>
       </card>
 
+      <card class="col-md-2">hello</card>
+
+ 
     </div>
   </div>
 </template>
@@ -148,7 +154,9 @@
   import StatsCard from 'src/components/Cards/StatsCard.vue'
   import LTable from 'src/components/Table.vue'
 
+          import { ref } from 'vue';
 
+ 
   export default {
     components: {
       LTable,
@@ -157,20 +165,20 @@
     },
     data () {
       return {
-        selectedEvents: [], //'',
+        selectedEvents: [{id: 0, name: "Select Event"}],
         eventsList: [],
         selectedACs: [],
         acList: [],
-        jsonEvents: [{"name": 123423432}] 
-
+        jsonEvents: []
+ 
       }
     },
     mounted () {
       const assetsContext = require.context('@/assets/eventsjson', false, /\.(json)$/);
       const jsonFiles = assetsContext.keys().map(key => assetsContext(key));
       console.log(jsonFiles);
-
-      // Build the select options 
+ 
+      // Build the select options
       for(let i = 0; i < jsonFiles.length; i++) {
         const jsonArray = jsonFiles[i]
         for(let j = 0; j < jsonArray.length; j++) {
@@ -187,25 +195,55 @@
     },
     methods: {
       selectEvents() {
-        console.log("selectedEvents --- ", this.selectedEvents)
-        // clear jsonEvents
-        // push to jsonEvents
+        this.selectedACs = [];
+        if( this.selectedEvents.length > 0 ) {
+          console.log("selectedEvents --- ", this.selectedEvents)
+
+          this.jsonEvents = [];
+        
+          for( let i = 0; i < this.selectedEvents.length; i++ ) {
+            const event = this.eventsList.find(obj => obj.id === this.selectedEvents[i]);
+            this.jsonEvents.push(event)
+          }
+
+        }
       },
       selectACs() {
+        this.selectedEvents = [];
         console.log("selected ACs --- ", this.selectedACs)
-      }
+
+        if( this.selectedACs.length > 0 ) {
+          console.log("selectedACs --- ", this.selectedACs)
+
+          this.jsonEvents = [];
+        
+          for( let i = 0; i < this.selectedACs.length; i++ ) {
+            const event = this.acList.find(obj => obj.id === this.selectedACs[i]);
+            this.jsonEvents.push(event)
+          }
+
+        }
+      },
+      handleClear() {
+        this.selectedACs = [];
+        this.selectedEvents = [];
+        this.jsonEvents = [];
+      },
     },
     computed: {
       formattedJson() {
-        return JSON.stringify(this.jsonEvents, null, 2);
+        return this.jsonEvents.length > 0 ? JSON.stringify(this.jsonEvents, null, 2) : '';
       }
     }
-
+ 
   }
 </script>
 <style>
 .center {
   margin: auto;
 }
-
+.clear-btn {
+  margin-right: 20px;
+}
+ 
 </style>
