@@ -95,7 +95,7 @@
           </stats-card>
         </div>
       </div>
-
+ 
 
       <div class="row">
         <card class="col-md-12">
@@ -166,7 +166,7 @@
         eventsList: [],
         selectedACs: [],
         acList: [],
-        jsonEvents: [], 
+        jsonEvents: [],
       }
     },
     mounted () {
