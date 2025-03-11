@@ -1,18 +1,18 @@
 <template>
   <div v-if="isVisible" class="modal-backdrop">
-    <div class="col-md-8 modal-content">
-      <slot />
-      <div class="content">
+    <div class="col-md-6 modal-content">
+      <slot name="content" />
+      <!-- <div class="content">
         <div class="container-fluid">
           <div class="row">
             <div class="col-md-8">
-              <edit-profile-form>
-              </edit-profile-form>
+
             </div>
           </div>
         </div>
-      </div>
-      <button class="btn btn-success float-right" @click="closeModal">Close</button> --- move up
+      </div> -->
+      <!-- <button class="btn btn-info float-right" @click="closeModal">Cancel</button> -->
+
     </div>
   </div>
 </template>
