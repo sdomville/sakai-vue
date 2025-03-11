@@ -2,7 +2,7 @@
   <div class="content">
     <div class="container-fluid">
       <div class="row">
-        <div class="col-12">
+        <!-- <div class="col-12">
           <card class="strpied-tabled-with-hover"
                 body-classes="table-full-width table-responsive"
           >
@@ -16,9 +16,9 @@
             </l-table>
           </card>
 
-        </div>
+        </div> -->
 
-        <div class="col-12">
+        <!-- <div class="col-12">
           <card class="card-plain">
             <template slot="header">
               <h4 class="card-title">Table on Plain Background</h4>
@@ -31,15 +31,15 @@
               </l-table>
             </div>
           </card>
-        </div>
+        </div> 
 
         <div class="col-12">
           <card class="strpied-tabled-with-hover"
                 body-classes="table-full-width table-responsive"
           >
             <template slot="header">
-              <h4 class="card-title">Small table</h4>
-              <p class="card-category">Here is a subtitle for this table</p>
+              <h4 class="card-title">Events CRUD</h4>
+              <p class="card-category">Add and Delete Events</p>
             </template>
             <l-table class="table-hover table-striped table-sm"
                      :columns="table1.columns"
@@ -47,7 +47,47 @@
             </l-table>
           </card>
 
-        </div>
+        </div> -->
+
+
+
+
+
+              
+      <!-- <card class="col-md-6"> AN OPTION.... -->
+      <card class="strpied-tabled-with-hover col-md-12"
+                body-classes="table-full-width table-responsive"
+          >
+        <template slot="header">
+          <div class="cardheader">
+          <h4 class="card-title">Events CRUD</h4>
+          </div>
+          <div class="cardbtn">
+              
+      
+            <button class="btn btn-success float-right" @click="openModal">Add Event</button>
+            <ModalComponent :is-visible="isModalVisible" @close="closeModal">
+              <!-- <p>This is the modal content.</p> -->
+              <div class="content">
+                <edit-profile-form>
+                </edit-profile-form>
+              </div>
+            </ModalComponent>
+        
+          </div>
+            <!-- </div> -->
+          <!-- <p class="card-category">Add and Delete Events</p> -->
+        </template>
+        <l-table class="table-hover table-striped table-sm"
+                  :columns="table1.columns"
+                  :data="table1.data">
+        </l-table>
+      </card>
+      <!-- </card> -->
+
+
+
+
 
       </div>
     </div>
@@ -56,49 +96,52 @@
 <script>
   import LTable from 'src/components/Table.vue'
   import Card from 'src/components/Cards/Card.vue'
-  const tableColumns = ['Id', 'Name', 'Salary', 'Country', 'City']
+  import ModalComponent from 'src/components/ModalComponent.vue';
+  import EditProfileForm from './UserProfile/EditProfileForm.vue'
+  import UserCard from './UserProfile/UserCard.vue'
+
+  const tableColumns = ['ACID', 'Name', 'AOC', 'AlertType']
   const tableData = [{
-    id: 1,
-    name: 'Dakota Rice',
-    salary: '$36.738',
-    country: 'Niger',
-    city: 'Oud-Turnhout'
+    acid: 1,
+    name: 'Event 1',
+    aoc: 'Space Race',
+    alerttype: 'L1',
   },
   {
-    id: 2,
-    name: 'Minerva Hooper',
-    salary: '$23,789',
-    country: 'Curaçao',
-    city: 'Sinaai-Waas'
+    acid: 2,
+    name: 'Event 2',
+    aoc: 'Ground',
+    alerttype: 'L3',
   },
   {
-    id: 3,
+    acid: 3,
     name: 'Sage Rodriguez',
-    salary: '$56,142',
-    country: 'Netherlands',
-    city: 'Baileux'
+    aoc: '$56,142',
+    alerttype: 'Netherlands',
   },
   {
-    id: 4,
+    acid: 4,
     name: 'Philip Chaney',
-    salary: '$38,735',
-    country: 'Korea, South',
-    city: 'Overland Park'
+    aoc: '$38,735',
+    alerttype: 'Korea, South',
   },
   {
-    id: 5,
+    acid: 5,
     name: 'Doris Greene',
-    salary: '$63,542',
-    country: 'Malawi',
-    city: 'Feldkirchen in Kärnten'
+    aoc: '$63,542',
+    alerttype: 'Malawi',
   }]
   export default {
     components: {
       LTable,
-      Card
+      Card,
+      ModalComponent,
+      EditProfileForm,
+      UserCard
     },
     data () {
       return {
+         isModalVisible: false,
         table1: {
           columns: [...tableColumns],
           data: [...tableData]
@@ -108,7 +151,15 @@
           data: [...tableData]
         }
       }
-    }
+    },
+    methods: {
+    openModal() {
+      this.isModalVisible = true;
+    },
+    closeModal() {
+      this.isModalVisible = false;
+    },
+    },
   }
 </script>
 <style>

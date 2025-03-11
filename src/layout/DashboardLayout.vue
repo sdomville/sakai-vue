@@ -6,17 +6,18 @@
         <i class="nc-icon nc-chart-pie-35"></i>
         <p>Dashboard</p>
       </sidebar-link>
-      <sidebar-link to="/admin/user">
-        <i class="nc-icon nc-alien-33"></i>
-        <p>Alerts</p>
-      </sidebar-link>
       <sidebar-link to="/admin/table-list">
         <i class="nc-icon nc-notes"></i>
         <p>Events</p>
       </sidebar-link>
+      <sidebar-link to="/admin/user">
+        <i class="nc-icon nc-alien-33"></i>
+        <p>Alerts</p>
+      </sidebar-link>
+
       <sidebar-link to="/admin/temporal">
         <i class="nc-icon nc-paper-2"></i>
-        <p>Temploral Metrics</p>
+        <p>Temporal Metrics</p>
       </sidebar-link>
       <sidebar-link to="/admin/icons">
         <i class="nc-icon nc-atom"></i>

@@ -96,56 +96,56 @@
         </div>
       </div>
  
-      <card class="col-md-6">
-        <h4 slot="header" class="card-title">Send Event(s) or AC(s)</h4>
-        <form>
-          <div class="row">
-            <div class="col-md-6">
-              <div class="form-group">
-                <label for="sel1">Select AC(s):</label>
-                <select multiple="true" class="form-control" v-model="selectedACs" @change="selectACs($event)" >
-                  <option v-for="ac in acList" :key="ac.id" :value="ac.id">{{ac.name}}</option>
-                </select>
-              </div>            
-            </div>
-            <div class="col-md-6">
-              <div class="form-group">
-                <label for="sel1">Select Event(s):</label>
-                <select multiple="true" class="form-control" v-model="selectedEvents" @change="selectEvents($event)" >
-                  <option v-for="event in eventsList" :key="event.id" :value="event.id">{{event.name}}</option>
-                </select>
+
+      <div class="row">
+        <card class="col-md-12">
+          <h4 slot="header" class="card-title">Send Event(s) or AC(s)</h4>
+          <form>
+            <div class="row">
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label for="sel1">Select AC(s):</label>
+                  <select multiple="true" class="form-control" v-model="selectedACs" @change="selectACs($event)" >
+                    <option v-for="ac in acList" :key="ac.id" :value="ac.id">{{ac.name}}</option>
+                  </select>
+                </div>            
+              </div>
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label for="sel1">Select Event(s):</label>
+                  <select multiple="true" class="form-control" v-model="selectedEvents" @change="selectEvents($event)" >
+                    <option v-for="event in eventsList" :key="event.id" :value="event.id">{{event.name}}</option>
+                  </select>
+                </div>
               </div>
             </div>
-          </div>
-          <div class="row">
-            <div class="col-md-12">
-              <div class="form-group">
-                <label>Event JSON</label>
-                <textarea rows="10" class="form-control border-input"
-                          placeholder=""
-                          v-model="formattedJson"
-                          >
-                  </textarea>
+            <div class="row">
+              <div class="col-md-12">
+                <div class="form-group">
+                  <label>Event JSON</label>
+                  <textarea rows="10" class="form-control border-input"
+                            placeholder=""
+                            v-model="formattedJson"
+                            >
+                    </textarea>
+                </div>
               </div>
             </div>
-          </div>
-          <div class="text-center">
-            <button type="submit" class="btn btn-info btn-fill float-right">
-              Publish
-            </button>
-          </div>
-          <div class="text-center">
-            <button type="submit" @click="handleClear" class="btn btn-info btn-fill float-right clear-btn">
-              Clear
-            </button>
-          </div>
-          <div class="clearfix"></div>
-        </form>
-      </card>
+            <div class="text-center">
+              <button type="submit" class="btn btn-info btn-fill float-right">
+                Publish
+              </button>
+            </div>
+            <div class="text-center">
+              <button type="submit" @click="handleClear" class="btn btn-secondary btn-fill float-right clear-btn">
+                Clear
+              </button>
+            </div>
+            <div class="clearfix"></div>
+          </form>
+        </card>
+      </div>
 
-      <card class="col-md-2">hello</card>
-
- 
     </div>
   </div>
 </template>
@@ -154,9 +154,6 @@
   import StatsCard from 'src/components/Cards/StatsCard.vue'
   import LTable from 'src/components/Table.vue'
 
-          import { ref } from 'vue';
-
- 
   export default {
     components: {
       LTable,
@@ -169,7 +166,8 @@
         eventsList: [],
         selectedACs: [],
         acList: [],
-        jsonEvents: []
+        jsonEvents: [],
+        icons: ["fa fa-paper-plane", "fa fa-trash"]
  
       }
     },
@@ -178,7 +176,7 @@
       const jsonFiles = assetsContext.keys().map(key => assetsContext(key));
       console.log(jsonFiles);
  
-      // Build the select options
+      // Build the event select options.
       for(let i = 0; i < jsonFiles.length; i++) {
         const jsonArray = jsonFiles[i]
         for(let j = 0; j < jsonArray.length; j++) {
@@ -194,34 +192,29 @@
       }
     },
     methods: {
+      // Build events selects & table CRUD list
       selectEvents() {
         this.selectedACs = [];
         if( this.selectedEvents.length > 0 ) {
-          console.log("selectedEvents --- ", this.selectedEvents)
-
           this.jsonEvents = [];
         
           for( let i = 0; i < this.selectedEvents.length; i++ ) {
             const event = this.eventsList.find(obj => obj.id === this.selectedEvents[i]);
             this.jsonEvents.push(event)
-          }
 
+            //this.tableData.push(event)
+          }
         }
       },
       selectACs() {
         this.selectedEvents = [];
-        console.log("selected ACs --- ", this.selectedACs)
-
         if( this.selectedACs.length > 0 ) {
-          console.log("selectedACs --- ", this.selectedACs)
-
           this.jsonEvents = [];
         
           for( let i = 0; i < this.selectedACs.length; i++ ) {
             const event = this.acList.find(obj => obj.id === this.selectedACs[i]);
             this.jsonEvents.push(event)
           }
-
         }
       },
       handleClear() {
@@ -239,11 +232,21 @@
   }
 </script>
 <style>
-.center {
-  margin: auto;
-}
-.clear-btn {
-  margin-right: 20px;
-}
+  .center {
+    margin: auto;
+  }
+  .clear-btn {
+    margin-right: 20px;
+  }
+  .cardheader {
+    width: 25%;
+  }
+  .cardbtn {
+    margin-top: 15px;
+    margin-right: 15px;
+    position:absolute;
+    top:0;
+    right:0;
+  }
  
 </style>
