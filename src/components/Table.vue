@@ -18,10 +18,6 @@
       </span>
 
 
-<!-- 
-<i
-class="fa fa-trash"></i> -->
-
     </tr>
     </tbody>
   </table>

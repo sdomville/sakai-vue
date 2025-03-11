@@ -3,8 +3,8 @@
     <!-- <div class="container-fluid">
       <div class="row">
         <div class="col-md-8">
-          <edit-profile-form>
-          </edit-profile-form>
+          <add-event>
+          </add-event>
         </div>
         <div class="col-md-4">
           <user-card>
@@ -15,12 +15,12 @@
   </div>
 </template>
 <script>
-  import EditProfileForm from './UserProfile/EditProfileForm.vue'
-  import UserCard from './UserProfile/UserCard.vue'
+  import AddEvent from './Events/AddEvent.vue'
+  import UserCard from './Events/UserCard.vue'
 
   export default {
     components: {
-      EditProfileForm,
+      AddEvent,
       UserCard
     }
   }
