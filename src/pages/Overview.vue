@@ -16,7 +16,7 @@
             </div>
           </stats-card>
         </div>
-
+ 
         <div class="col-xl-3 col-md-6 center">
           <stats-card>
             <div slot="header" class="icon-success">
@@ -31,7 +31,7 @@
             </div>
           </stats-card>
         </div>
-
+ 
         <div class="col-xl-3 col-md-6 center">
           <stats-card>
             <div slot="header" class="icon-info">
@@ -47,8 +47,7 @@
           </stats-card>
         </div>
       </div>
-
-
+ 
       <!-- second row of cards -->
       <div class="row">
         <div class="col-xl-3 col-md-6 center">
@@ -65,7 +64,7 @@
             </div>
           </stats-card>
         </div>
-
+ 
         <div class="col-xl-3 col-md-6 center">
           <stats-card>
             <div slot="header" class="icon-success">
@@ -80,7 +79,7 @@
             </div>
           </stats-card>
         </div>
-
+ 
         <div class="col-xl-3 col-md-6 center">
           <stats-card>
             <div slot="header" class="icon-danger">
@@ -96,62 +95,56 @@
           </stats-card>
         </div>
       </div>
+ 
 
-      <card>
-        <h4 slot="header" class="card-title">Send Event</h4>
-        <form>
-          <div class="row">
-            <div class="col-md-5">
-
-
-
-
-              <base-dropdown tag="div">
-                <template slot="title">
-                  <base-input type="text"
-                            label="Event API"
-                            placeholder="Select Event"
-                            v-model="selectedValue"
-                            >
-                  </base-input>
-                  <p>Selected Value: {{ selectedValue }}</p>
-
-                  <!-- <span class="notification">???</span> -->
-                </template>
-
-                <!-- HOW TO MAKE THESE ATTACH TO selectedValue and populate the input field?? -->
-
-                <span class="dropdown-item"  href="#">Notification 1</span>
-                <a class="dropdown-item" value="option1" href="#">Notification 2</a>
-                <a class="dropdown-item" href="#">Notification 3</a>
-                <a class="dropdown-item" href="#">Notification 4</a>
-                <a class="dropdown-item" href="#">Another notification</a>
-              </base-dropdown>
-            </div>
-
-          </div>
-
-
-
-          <div class="row">
-            <div class="col-md-12">
-              <div class="form-group">
-                <label>Event JSON</label>
-                <textarea rows="10" class="form-control border-input"
-                          placeholder="Here can be your description"
-                          >
-                  </textarea>
+      <div class="row">
+        <card class="col-md-12">
+          <h4 slot="header" class="card-title">Send Event(s) or AC(s)</h4>
+          <form>
+            <div class="row">
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label for="sel1">Select AC(s):</label>
+                  <select multiple="true" class="form-control" v-model="selectedACs" @change="selectACs($event)" >
+                    <option v-for="ac in acList" :key="ac.id" :value="ac.id">{{ac.name}}</option>
+                  </select>
+                </div>            
+              </div>
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label for="sel1">Select Event(s):</label>
+                  <select multiple="true" class="form-control" v-model="selectedEvents" @change="selectEvents($event)" >
+                    <option v-for="event in eventsList" :key="event.id" :value="event.id">{{event.name}}</option>
+                  </select>
+                </div>
               </div>
             </div>
-          </div>
-          <div class="text-center">
-            <button type="submit" class="btn btn-info btn-fill float-right">
-              Publish
-            </button>
-          </div>
-          <div class="clearfix"></div>
-        </form>
-      </card>
+            <div class="row">
+              <div class="col-md-12">
+                <div class="form-group">
+                  <label>Event JSON</label>
+                  <textarea rows="10" class="form-control border-input"
+                            placeholder=""
+                            v-model="formattedJson"
+                            >
+                    </textarea>
+                </div>
+              </div>
+            </div>
+            <div class="text-center">
+              <button type="submit" class="btn btn-info btn-fill float-right">
+                Publish
+              </button>
+            </div>
+            <div class="text-center">
+              <button type="submit" @click="handleClear" class="btn btn-secondary btn-fill float-right clear-btn">
+                Clear
+              </button>
+            </div>
+            <div class="clearfix"></div>
+          </form>
+        </card>
+      </div>
 
     </div>
   </div>
@@ -169,97 +162,91 @@
     },
     data () {
       return {
-        selectedValue: '',
-
-        editTooltip: 'Edit Task',
-        deleteTooltip: 'Remove',
-        pieChart: {
-          data: {
-            labels: ['40%', '20%', '40%'],
-            series: [40, 20, 40]
+        selectedEvents: [{id: 0, name: "Select Event"}],
+        eventsList: [],
+        selectedACs: [],
+        acList: [],
+        jsonEvents: [],
+        icons: ["fa fa-paper-plane", "fa fa-trash"]
+ 
+      }
+    },
+    mounted () {
+      const assetsContext = require.context('@/assets/eventsjson', false, /\.(json)$/);
+      const jsonFiles = assetsContext.keys().map(key => assetsContext(key));
+      console.log(jsonFiles);
+ 
+      // Build the event select options.
+      for(let i = 0; i < jsonFiles.length; i++) {
+        const jsonArray = jsonFiles[i]
+        for(let j = 0; j < jsonArray.length; j++) {
+          // If associated with an AC
+          if( jsonArray[j].acID ) {
+            this.acList.push(jsonArray[j])
           }
-        },
-        lineChart: {
-          data: {
-            labels: ['9:00AM', '12:00AM', '3:00PM', '6:00PM', '9:00PM', '12:00PM', '3:00AM', '6:00AM'],
-            series: [
-              [287, 385, 490, 492, 554, 586, 698, 695],
-              [67, 152, 143, 240, 287, 335, 435, 437],
-              [23, 113, 67, 108, 190, 239, 307, 308]
-            ]
-          },
-          options: {
-            low: 0,
-            high: 800,
-            showArea: false,
-            height: '245px',
-            axisX: {
-              showGrid: false
-            },
-            lineSmooth: true,
-            showLine: true,
-            showPoint: true,
-            fullWidth: true,
-            chartPadding: {
-              right: 50
-            }
-          },
-          responsiveOptions: [
-            ['screen and (max-width: 640px)', {
-              axisX: {
-                labelInterpolationFnc (value) {
-                  return value[0]
-                }
-              }
-            }]
-          ]
-        },
-        barChart: {
-          data: {
-            labels: ['Jan', 'Feb', 'Mar', 'Apr', 'Mai', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-            series: [
-              [542, 443, 320, 780, 553, 453, 326, 434, 568, 610, 756, 895],
-              [412, 243, 280, 580, 453, 353, 300, 364, 368, 410, 636, 695]
-            ]
-          },
-          options: {
-            seriesBarDistance: 10,
-            axisX: {
-              showGrid: false
-            },
-            height: '245px'
-          },
-          responsiveOptions: [
-            ['screen and (max-width: 640px)', {
-              seriesBarDistance: 5,
-              axisX: {
-                labelInterpolationFnc (value) {
-                  return value[0]
-                }
-              }
-            }]
-          ]
-        },
-        tableData: {
-          data: [
-            {title: 'Sign contract for "What are conference organizers afraid of?"', checked: false},
-            {title: 'Lines From Great Russian Literature? Or E-mails From My Boss?', checked: true},
-            {
-              title: 'Flooded: One year later, assessing what was lost and what was found when a ravaging rain swept through metro Detroit',
-              checked: true
-            },
-            {title: 'Create 4 Invisible User Experiences you Never Knew About', checked: false},
-            {title: 'Read "Following makes Medium better"', checked: false},
-            {title: 'Unfollow 5 enemies from twitter', checked: false}
-          ]
+          // Else, just a list of events
+          else {
+            this.eventsList.push(jsonArray[j])
+          }
         }
       }
+    },
+    methods: {
+      // Build events selects & table CRUD list
+      selectEvents() {
+        this.selectedACs = [];
+        if( this.selectedEvents.length > 0 ) {
+          this.jsonEvents = [];
+        
+          for( let i = 0; i < this.selectedEvents.length; i++ ) {
+            const event = this.eventsList.find(obj => obj.id === this.selectedEvents[i]);
+            this.jsonEvents.push(event)
+
+            //this.tableData.push(event)
+          }
+        }
+      },
+      selectACs() {
+        this.selectedEvents = [];
+        if( this.selectedACs.length > 0 ) {
+          this.jsonEvents = [];
+        
+          for( let i = 0; i < this.selectedACs.length; i++ ) {
+            const event = this.acList.find(obj => obj.id === this.selectedACs[i]);
+            this.jsonEvents.push(event)
+          }
+        }
+      },
+      handleClear() {
+        this.selectedACs = [];
+        this.selectedEvents = [];
+        this.jsonEvents = [];
+      },
+    },
+    computed: {
+      formattedJson() {
+        return this.jsonEvents.length > 0 ? JSON.stringify(this.jsonEvents, null, 2) : '';
+      }
     }
+ 
   }
 </script>
 <style>
-.center {
-  margin: auto;
-}
-
+  .center {
+    margin: auto;
+  }
+  .clear-btn {
+    margin-right: 20px;
+  }
+  .cardheader {
+    width: 25%;
+  }
+  .cardbtn {
+    margin-top: 15px;
+    margin-right: 15px;
+    position:absolute;
+    top:0;
+    right:0;
+  }
+ 
 </style>

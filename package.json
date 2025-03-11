@@ -2,7 +2,7 @@
   "name": "vue-light-bootstrap-dashboard",
   "version": "2.1.0",
   "private": true,
-  "description": "Vue light bootstrap dashboard",
+  "description": "Buddy",
   "author": "buddy",
   "scripts": {
     "serve": "vue-cli-service serve --open",

@@ -12,6 +12,16 @@
       <slot :row="item">
         <td v-for="column in columns" :key="column" v-if="hasValue(item, column)">{{itemValue(item, column)}}</td>
       </slot>
+
+      <span v-for="icon in crudIcons" :key="icon">
+        <i :class="[icon]"></i>
+      </span>
+
+
+<!-- 
+<i
+class="fa fa-trash"></i> -->
+
     </tr>
     </tbody>
   </table>
@@ -21,7 +31,8 @@
     name: 'l-table',
     props: {
       columns: Array,
-      data: Array
+      data: Array,
+      crudIcons: Array
     },
     methods: {
       hasValue (item, column) {
