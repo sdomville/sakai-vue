@@ -35,7 +35,6 @@
                     v-model="event.acid">
           </base-input>
         </div>
-
       </div>
 
       <div class="row">
@@ -49,11 +48,11 @@
           </div>
         </div>
       </div>
-      <div class="text-center">
-        <button type="submit" class="btn btn-info btn-fill float-right" @click.prevent="saveEvent">
-          Save Event
-        </button>
-      </div>
+      <button type="submit" class="btn btn-info btn-fill float-right" @click.prevent="saveEvent">
+        Save Event
+      </button>
+      <button class="btn btn-info" @click="closeModal">Cancel</button>
+
       <div class="clearfix"></div>
     </form>
   </card>
@@ -65,6 +64,7 @@
     components: {
       Card
     },
+    props: ['parentFunction'],
     data () {
       return {
         event: {
@@ -77,8 +77,11 @@
     },
     methods: {
       saveEvent () {
-        alert('Your event: ' + JSON.stringify(this.user))
-      }
+        alert('Your event: ' + JSON.stringify(this.event))
+      },
+      closeModal() {
+        this.$emit('close');
+    },
     }
   }
 

@@ -83,11 +83,11 @@
         <div class="col-xl-3 col-md-6 center">
           <stats-card>
             <div slot="header" class="icon-danger">
-              <i class="nc-icon nc-vector text-danger"></i>
+              <i class="nc-icon nc-single-copy-04 text-danger"></i>
             </div>
             <div slot="content">
-              <p class="card-category">Issues</p>
-              <h4 class="card-title">+45</h4>
+              <p class="card-category">Test Results</p>
+              <h4 class="card-title">75%</h4>
             </div>
             <div slot="footer">
               <i class="fa fa-refresh"></i>Updated now
@@ -95,7 +95,7 @@
           </stats-card>
         </div>
       </div>
- 
+
 
       <div class="row">
         <card class="col-md-12">
@@ -166,9 +166,7 @@
         eventsList: [],
         selectedACs: [],
         acList: [],
-        jsonEvents: [],
-        icons: ["fa fa-paper-plane", "fa fa-trash"]
- 
+        jsonEvents: [], 
       }
     },
     mounted () {
