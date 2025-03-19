@@ -1,11 +1,3 @@
-<script setup>
-import BestSellingWidget from '@/components/dashboard/BestSellingWidget.vue';
-import NotificationsWidget from '@/components/dashboard/NotificationsWidget.vue';
-import RecentSalesWidget from '@/components/dashboard/RecentSalesWidget.vue';
-import RevenueStreamWidget from '@/components/dashboard/RevenueStreamWidget.vue';
-import StatsWidget from '@/components/dashboard/StatsWidget.vue';
-</script>
-
 <template>
     <div>
         <div class="grid grid-cols-12 gap-8">
@@ -18,37 +10,60 @@ import StatsWidget from '@/components/dashboard/StatsWidget.vue';
                     <div class="font-semibold text-xl">Send Event(s) or AC(s)</div>
                     <div class="flex flex-col md:flex-row gap-4">
                         <div class="flex flex-wrap gap-2 w-full">
-                            <label for="firstname">Select AC(s)</label>
-                            <select id="firstname" multiple="true" v-model="selectedACs" @change="selectACs($event)">
-                                <option v-for="ac in acList" :key="ac.id" :value="ac.id">{{ ac.name }}</option>
-                            </select>
-                            <!-- <InputText id="firstname2" type="text" /> -->
+                            <label for="state">ACs</label>
+                            <!-- <Select id="state" v-model="dropdownItem" :options="dropdownItems" optionLabel="name" placeholder="Select One" class="w-full"></Select> -->
+                            <MultiSelect v-model="multiselectACValue" :options="acList" @change="selectACs($event)" optionLabel="name" placeholder="Select ACs" :filter="true">
+                                <template #value="slotProps">
+                                    <div class="inline-flex items-center py-1 px-2 bg-primary text-primary-contrast rounded-border mr-2" v-for="option of slotProps.value" :key="option.id">
+                                        <!-- <span :class="'mr-2 flag flag-' + option.code.toLowerCase()" style="width: 18px; height: 12px" /> -->
+                                        <div>{{ option.name }}</div>
+                                    </div>
+                                    <template v-if="!slotProps.value || slotProps.value.length === 0">
+                                        <div class="p-1">Select AC(s)</div>
+                                    </template>
+                                </template>
+                                <template #option="slotProps">
+                                    <div class="flex items-center">
+                                        <!-- <span :class="'mr-2 flag flag-' + slotProps.option.code.toLowerCase()" style="width: 18px; height: 12px" /> -->
+                                        <div>{{ slotProps.option.name }}</div>
+                                    </div>
+                                </template>
+                            </MultiSelect>
                         </div>
                         <div class="flex flex-wrap gap-2 w-full">
-                            <label for="lastname">Select Event(s)</label>
-                            <select multiple="true" class="form-control" v-model="selectedEvents" @change="selectEvents($event)">
-                                <option v-for="event in eventsList" :key="event.id" :value="event.id">{{ event.name }}</option>
-                            </select>
+                            <label for="state">Events</label>
+                            <!-- <Select id="state" v-model="dropdownItem" :options="dropdownItems" optionLabel="name" placeholder="Select One" class="w-full"></Select> -->
+                            <MultiSelect v-model="multiselectEventValue" :options="eventsList" @change="selectEvents($event)" optionLabel="name" placeholder="Select ACs" :filter="true">
+                                <template #value="slotProps">
+                                    <div class="inline-flex items-center py-1 px-2 bg-primary text-primary-contrast rounded-border mr-2" v-for="option of slotProps.value" :key="option.id">
+                                        <!-- <span :class="'mr-2 flag flag-' + option.code.toLowerCase()" style="width: 18px; height: 12px" /> -->
+                                        <div>{{ option.name }}</div>
+                                    </div>
+                                    <template v-if="!slotProps.value || slotProps.value.length === 0">
+                                        <div class="p-1">Select Event(s)</div>
+                                    </template>
+                                </template>
+                                <template #option="slotProps">
+                                    <div class="flex items-center">
+                                        <!-- <span :class="'mr-2 flag flag-' + slotProps.option.code.toLowerCase()" style="width: 18px; height: 12px" /> -->
+                                        <div>{{ slotProps.option.name }}</div>
+                                    </div>
+                                </template>
+                            </MultiSelect>
                         </div>
+                        <!-- <div class="flex flex-wrap gap-2 w-full">
+                            <label for="zip">Zip</label>
+                            <InputText id="zip" type="text" />
+                        </div> -->
                     </div>
 
                     <div class="flex flex-wrap">
                         <label for="address">Event JSON</label>
-                        <textarea rows="10" id="address" class="form-control border-input" placeholder="" v-model="formattedJson"> </textarea>
-                        <!-- <Textarea id="address" rows="4" /> -->
+                        <Textarea id="address" rows="25" v-model="formattedJson"/>
                     </div>
 
-                    <div class="flex flex-col md:flex-row gap-4">
-                        <div class="flex flex-wrap gap-2 w-full">
-                            <label for="state">State</label>
-                            <Select id="state" v-model="dropdownItem" :options="dropdownItems" optionLabel="name" placeholder="Select One" class="w-full"></Select>
-                        </div>
-                        <div class="flex flex-wrap gap-2 w-full">
-                            <label for="zip">Zip</label>
-                            <InputText id="zip" type="text" />
-                        </div>
-                    </div>
                     <div class="text-center">
+                        <!-- TODO: new buttons -->
                         <button type="submit" class="btn btn-info btn-fill float-right">Publish</button>
                         <button type="submit" @click="handleClear" class="btn btn-secondary btn-fill float-right clear-btn">Clear</button>
                     </div>
@@ -58,15 +73,18 @@ import StatsWidget from '@/components/dashboard/StatsWidget.vue';
     </div>
 </template>
 <script>
+import StatsWidget from '@/components/dashboard/StatsWidget.vue';
+import { ref } from 'vue';
+
 export default {
-    components: {},
+    components: { StatsWidget },
     data() {
         return {
-            selectedEvents: [{ id: 0, name: 'Select Event' }],
             eventsList: [],
-            selectedACs: [],
             acList: [],
-            jsonEvents: []
+            jsonEvents: [],
+            multiselectACValue: ref(null),
+            multiselectEventValue: ref(null)
         };
     },
     mounted() {
@@ -94,32 +112,29 @@ export default {
     methods: {
         // Build events selects & table CRUD list
         selectEvents() {
-            this.selectedACs = [];
-            if (this.selectedEvents.length > 0) {
+            this.multiselectACValue = [];
+            if (this.multiselectEventValue.length > 0) {
                 this.jsonEvents = [];
-
-                for (let i = 0; i < this.selectedEvents.length; i++) {
-                    const event = this.eventsList.find((obj) => obj.id === this.selectedEvents[i]);
+                for (let i = 0; i < this.multiselectEventValue.length; i++) {
+                    const event = this.eventsList.find((obj) => obj.id === this.multiselectEventValue[i].id);
                     this.jsonEvents.push(event);
-
-                    //this.tableData.push(event)
                 }
             }
         },
         selectACs() {
-            this.selectedEvents = [];
-            if (this.selectedACs.length > 0) {
+            this.multiselectEventValue = [];
+            if (this.multiselectACValue.length > 0) {
                 this.jsonEvents = [];
 
-                for (let i = 0; i < this.selectedACs.length; i++) {
-                    const event = this.acList.find((obj) => obj.id === this.selectedACs[i]);
+                for (let i = 0; i < this.multiselectACValue.length; i++) {
+                    const event = this.acList.find((obj) => obj.id === this.multiselectACValue[i].id);
                     this.jsonEvents.push(event);
                 }
             }
         },
         handleClear() {
-            this.selectedACs = [];
-            this.selectedEvents = [];
+            this.multiselectACValue = [];
+            this.multiselectEventValue = [];
             this.jsonEvents = [];
         }
     },
@@ -148,4 +163,3 @@ export default {
     right: 0;
 }
 </style>
-
