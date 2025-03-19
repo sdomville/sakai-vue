@@ -6,10 +6,15 @@ import AppMenuItem from './AppMenuItem.vue';
 const model = ref([
     {
         label: 'Home',
-        items: [{ label: 'Dashboard', icon: 'pi pi-fw pi-home', to: '/' }]
+        items: [
+            { label: 'Dashboard', icon: 'pi pi-fw pi-home', to: '/' },
+            { label: 'Events', icon: 'pi pi-fw pi-home', to: '/events' },
+            { label: 'Alerts', icon: 'pi pi-fw pi-home', to: '/alerts' },
+            { label: 'Epic ACs', icon: 'pi pi-fw pi-home', to: '/evnetsacs' }
+        ]
     },
     {
-        label: 'UI Components',
+        label: 'UI Components (for development)',
         items: [
             { label: 'Form Layout', icon: 'pi pi-fw pi-id-card', to: '/uikit/formlayout' },
             { label: 'Input', icon: 'pi pi-fw pi-check-square', to: '/uikit/input' },
